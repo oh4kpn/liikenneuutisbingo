@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<title>Uutisbingo 🚓</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    table {
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 120px;
+        height: 100px;
+        border: 2px solid #444;
+        padding: 5px;
+        cursor: pointer;
+        background: #222;
+        transition: 0.2s;
+    }
+
+    td:hover {
+        background: #333;
+    }
+
+    .active {
+        background: lightgreen !important;
+        color: black;
+    }
+
+    #bingo {
+        display: none;
+        font-size: 40px;
+        margin-top: 20px;
+        color: lightgreen;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<h1>🚓 UUTISBINGO</h1>
+<button onclick="generateBingo()">Uusi bingo</button>
+
+<table id="grid"></table>
+
+<div id="bingo">🎉 BINGO! 🎉</div>
+
+<script>
+const squares = [
+"Kortiton","Vakuuttamaton","Katsastamaton","Tieliikennekelvoton","Lainattu",
+"Varastettu","Luvattomasti käyttöönotettu","Varastetulla verottomalla löpöllä",
+"Humalassa","Huumausaineiden alaisena","Ehdonalaisessa","Vangittuna",
+"Alaikäinen","Eläkeläinen",
+"Ei muista tapahtunutta","Ajo oli vain lyhyt matka","Auto ei ollut hänen",
+"Kaverin auto","Poliisi tuttu entuudestaan","Useita rikosnimikkeitä",
+"Ei suostunut puhallukseen","Yritti paeta","Pakeni jalan","Suistui tieltä",
+"Ojaan","Osui liikennemerkkiin","Koirapartio paikalla","Useita matkustajia",
+"Ajokielto voimassa","Ajoi ylinopeutta","Auto rekisteristä poistettu",
+"Myönsi teon","Kielsi kaiken","Sekava käytös","Takavarikoitiin paikan päällä"
+];
+
+let state = Array(25).fill(false);
+
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function generateBingo() {
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    document.getElementById("bingo").style.display = "none";
+
+    state = Array(25).fill(false);
+
+    let items = shuffle([...squares]).slice(0,25);
+    items[12] = "ILMAINEN: Poliisi tutkii";
+
+    for (let r = 0; r < 5; r++) {
+        let row = document.createElement("tr");
+        for (let c = 0; c < 5; c++) {
+            let cell = document.createElement("td");
+            let index = r*5 + c;
+            cell.innerText = items[index];
+
+            cell.onclick = () => toggle(cell, index);
+            row.appendChild(cell);
+        }
+        grid.appendChild(row);
+    }
+}
+
+function toggle(cell, index) {
+    state[index] = !state[index];
+    cell.classList.toggle("active");
+    checkBingo();
+}
+
+function checkBingo() {
+    const wins = [
+        [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+        [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+        [0,6,12,18,24],[4,8,12,16,20]
+    ];
+
+    for (let w of wins) {
+        if (w.every(i => state[i])) {
+            document.getElementById("bingo").style.display = "block";
+            return;
+        }
+    }
+}
+
+// initial load
+generateBingo();
+</script>
+
+</body>
+</html>
