@@ -1,0 +1,3 @@
+## Liikenneuutisbingo
+
+python bingo.py
