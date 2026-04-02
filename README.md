@@ -1,3 +1,6 @@
 ## Liikenneuutisbingo
 
-python bingo.py
+cli: python bingo.py
+
+chrome: ./bingo.html
+
