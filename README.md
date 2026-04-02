@@ -2,5 +2,5 @@
 
 cli: python bingo.py
 
-gui: chrome://bingo.html
+gui: http://bingo.html
 
